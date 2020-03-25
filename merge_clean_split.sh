@@ -23,6 +23,7 @@ function merge_coins() {
         coin="KMD"
         asset=""
     fi
+    cli=$($komodo_cli $asset)
     echo "----------------------------------------"
     echo "Merging UTXO's of $coin - ${date}"
     echo "----------------------------------------"
@@ -45,6 +46,7 @@ function cleanwallettransactions() {
         coin="KMD"
         asset=""
     fi
+    cli=$($komodo_cli $asset)
     result=$(${cli} cleanwallettransactions)
     result_formatted=$(echo $result | jq -r '"Total Tx: \(.total_transactons) | Remaining Tx: \(.remaining_transactons) | Removed Tx: \(.removed_transactions)"')
 
@@ -137,7 +139,6 @@ init_colors
 log_print "Starting merge_clean_split ..."
 declare -a kmd_coins=(KMD RICK MORTY TXSCLAPOW)
 for i in "${kmd_coins[@]}"; do
-    cli=$($komodo_cli $asset)
     merge_coins $i
     cleanwallettransactions $i
     dosplit $i
