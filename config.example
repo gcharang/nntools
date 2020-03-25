@@ -17,7 +17,7 @@ komodod="$HOME/komodo/src/komodod"
 #set to 1 if this is the server for third party coins, else leave as 0
 thirdpartycoins=0
 
-#Set iguana port (current 7776 for first party, 7779 for third party)
+#Set iguana port (current 7776 for first party, 7779 for third party) 7778 for testnet
 iguanaport=7776
 
 #Enter your notary node compressed address (no quotes)
