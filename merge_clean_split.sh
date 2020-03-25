@@ -23,13 +23,12 @@ function merge_coins() {
         coin="KMD"
         asset=""
     fi
-    cli=$($komodo_cli $asset)
     echo "----------------------------------------"
     echo "Merging UTXO's of $coin - ${date}"
     echo "----------------------------------------"
 
-    echo "[${coin}] Current balance: $(${cli} getbalance) - consolidating..."
-    txid=$(${cli} sendtoaddress ${nAddress} $(${cli} getbalance) \"\" \"\" true)
+    echo "[${coin}] Current balance: $($komodo_cli $asset getbalance) - consolidating..."
+    txid=$($komodo_cli $asset sendtoaddress ${nAddress} $($komodo_cli $asset getbalance) \"\" \"\" true)
 
     if [[ ${txid} != "null" ]]; then
         echo "[${coin}] Merge TXID: ${txid}"
@@ -46,8 +45,7 @@ function cleanwallettransactions() {
         coin="KMD"
         asset=""
     fi
-    cli=$($komodo_cli $asset)
-    result=$(${cli} cleanwallettransactions)
+    result=$($komodo_cli $asset cleanwallettransactions)
     result_formatted=$(echo $result | jq -r '"Total Tx: \(.total_transactons) | Remaining Tx: \(.remaining_transactons) | Removed Tx: \(.removed_transactions)"')
 
     echo "[$coin] ${date} | $result_formatted"
