@@ -35,6 +35,14 @@ function merge_coins() {
     else
         echo "[${coin}] Error: $(echo ${txid} | jq -r '.error')"
     fi
+
+    merge_confirmed=false
+    while [ !${merge_confirmed} ]; do
+        confs = $($komodo_cli $asset gettransaction $txid | jq -r .rawconfirmations)
+        if [[ ${confs} -gt 0 ]]; then
+            merge_confirmed=true
+        fi
+    done
 }
 
 function cleanwallettransactions() {
