@@ -16,6 +16,13 @@ iguana_port=7778
 date=$(date +'%Y-%m-%d %H:%M:%S')
 
 function merge_coins() {
+    if [ ! -z $i ] && [ $i != "KMD" ]; then
+        coin=$1
+        asset=" -ac_name=$i"
+    else
+        coin="KMD"
+        asset=""
+    fi
     echo "----------------------------------------"
     echo "Merging UTXO's of $coin - ${date}"
     echo "----------------------------------------"
@@ -31,6 +38,13 @@ function merge_coins() {
 }
 
 function cleanwallettransactions() {
+    if [ ! -z $i ] && [ $i != "KMD" ]; then
+        coin=$1
+        asset=" -ac_name=$i"
+    else
+        coin="KMD"
+        asset=""
+    fi
     result=$(${cli} cleanwallettransactions)
     result_formatted=$(echo $result | jq -r '"Total Tx: \(.total_transactons) | Remaining Tx: \(.remaining_transactons) | Removed Tx: \(.removed_transactions)"')
 
@@ -73,6 +87,13 @@ function log_print() {
     echo -e [$datetime] $1
 }
 function dosplit() {
+    if [ ! -z $i ] && [ $i != "KMD" ]; then
+        coin=$1
+        asset=" -ac_name=$i"
+    else
+        coin="KMD"
+        asset=""
+    fi
     utxo=$($komodo_cli $asset listunspent | jq "[.[] | select (.generated==false and .amount==0.0001 and .spendable==true and (.scriptPubKey == \"$NN_PUBKEY\"))] | length")
     if [ -n "$utxo" ] && [ "$utxo" -eq "$utxo" ] 2>/dev/null; then
         if [[ $utxo -lt $utxo_min ]]; then
@@ -116,15 +137,8 @@ init_colors
 log_print "Starting merge_clean_split ..."
 declare -a kmd_coins=(KMD RICK MORTY TXSCLAPOW)
 for i in "${kmd_coins[@]}"; do
-    if [ ! -z $i ] && [ $i != "KMD" ]; then
-        coin=$1
-        asset=" -ac_name=$i"
-    else
-        coin="KMD"
-        asset=""
-    fi
     cli=$($komodo_cli $asset)
-    merge_coins
-    cleanwallettransactions
-    dosplit
+    merge_coins $i
+    cleanwallettransactions $i
+    dosplit $i
 done
