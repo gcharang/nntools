@@ -1,22 +1,19 @@
 #!/bin/bash
 cd "${BASH_SOURCE%/*}" || exit
 
-# optionally consolidate a single coin
-# e.g. "KMD"
-coin=$1
-
 # change node address here
 nAddress="RCoyQjVxwe9j3zs5xeSSra7TjfLNnFKnES"
 
+# ENV for Ubuntu, other dist use .bash_profile
+source $HOME/.profile
+# CONFIG
+komodo_cli=/usr/local/bin/komodo-cli
+NN_PUBKEY=210382d630bb9192baa0486dc0a333ebba9a83a9a78b4dadc44226341944fd71b041ac
+utxo_min=15
+utxo_max=30
+iguana_port=7778
+
 date=$(date +'%Y-%m-%d %H:%M:%S')
-if [ ! -z $1 ] && [ $1 != "KMD" ]; then
-    coin=$1
-    asset=" -ac_name=$1"
-else
-    coin="KMD"
-    asset=""
-fi
-cli=$($komodo_cli $asset)
 
 function merge_coins() {
     echo "----------------------------------------"
@@ -34,7 +31,7 @@ function merge_coins() {
 }
 
 function cleanwallettransactions() {
-    result=$($cli cleanwallettransactions)
+    result=$(${cli} cleanwallettransactions)
     result_formatted=$(echo $result | jq -r '"Total Tx: \(.total_transactons) | Remaining Tx: \(.remaining_transactons) | Removed Tx: \(.removed_transactions)"')
 
     echo "[$coin] ${date} | $result_formatted"
@@ -53,14 +50,7 @@ function cleanwallettransactions() {
 #
 #
 #
-# ENV for Ubuntu, other dist use .bash_profile
-source $HOME/.profile
-# CONFIG
-komodo_cli=/usr/local/bin/komodo-cli
-NN_PUBKEY=210382d630bb9192baa0486dc0a333ebba9a83a9a78b4dadc44226341944fd71b041ac
-utxo_min=15
-utxo_max=30
-iguana_port=7778
+
 #
 #
 #
@@ -83,13 +73,6 @@ function log_print() {
     echo -e [$datetime] $1
 }
 function dosplit() {
-    if [ ! -z $1 ] && [ $1 != "KMD" ]; then
-        coin=$1
-        asset=" -ac_name=$1"
-    else
-        coin="KMD"
-        asset=""
-    fi
     utxo=$($komodo_cli $asset listunspent | jq "[.[] | select (.generated==false and .amount==0.0001 and .spendable==true and (.scriptPubKey == \"$NN_PUBKEY\"))] | length")
     if [ -n "$utxo" ] && [ "$utxo" -eq "$utxo" ] 2>/dev/null; then
         if [[ $utxo -lt $utxo_min ]]; then
@@ -133,7 +116,15 @@ init_colors
 log_print "Starting merge_clean_split ..."
 declare -a kmd_coins=(KMD RICK MORTY TXSCLAPOW)
 for i in "${kmd_coins[@]}"; do
-    merge_coins $i
-    cleanwallettransactions $i
-    dosplit $i
+    if [ ! -z $i ] && [ $i != "KMD" ]; then
+        coin=$1
+        asset=" -ac_name=$i"
+    else
+        coin="KMD"
+        asset=""
+    fi
+    cli=$($komodo_cli $asset)
+    merge_coins
+    cleanwallettransactions
+    dosplit
 done
