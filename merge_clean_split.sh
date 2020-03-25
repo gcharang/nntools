@@ -41,7 +41,7 @@ function merge_coins() {
         confs=$($komodo_cli $asset gettransaction $txid | jq -r .rawconfirmations)
         sleep 10
         echo "[${coin}] Waiting for the merge txn to confirm. Current Confs: ${confs}"
-        if [ ${confs} -gt 0 ]; then
+        if [ "$confs" -gt 0 ]; then
             merge_confirmed=true
         fi
     done
