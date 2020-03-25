@@ -38,7 +38,7 @@ function merge_coins() {
 
     merge_confirmed=false
     while [ !${merge_confirmed} ]; do
-        confs = $($komodo_cli $asset gettransaction $txid | jq -r .rawconfirmations)
+        confs=$($komodo_cli $asset gettransaction $txid | jq -r .rawconfirmations)
         if [[ ${confs} -gt 0 ]]; then
             merge_confirmed=true
         fi
