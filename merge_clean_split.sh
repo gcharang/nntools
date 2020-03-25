@@ -40,8 +40,8 @@ function merge_coins() {
     while [ !${merge_confirmed} ]; do
         confs=$($komodo_cli $asset gettransaction $txid | jq -r .rawconfirmations)
         sleep 10
-        echo "[${coin}] Waiting for the merge txn to confirm"
-        if [[ ${confs} -gt 0 ]]; then
+        echo "[${coin}] Waiting for the merge txn to confirm. Current Confs: ${confs}"
+        if [ ${confs} -gt 0 ]; then
             merge_confirmed=true
         fi
     done
