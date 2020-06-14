@@ -39,9 +39,9 @@ nn_3p_pubkey=
 datetime=$(date '+%Y-%m-%d %H:%M:%S')
 
 #Loop stats script every this many seconds
-sleepytime=600
+#sleepytime=600
 #Else change to false if you don't want it to loop
-#sleepytime=false
+sleepytime=false
 
 #How many transactions back to scan for notarizations
 txscanamount=777
@@ -89,5 +89,7 @@ btc_address=
 chips_address=
 game_address=
 emc2_address=
-gin_address=
+hush_address=
 aya_address=
+mcl_address=
+vrsc_address=
