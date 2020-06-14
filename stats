@@ -30,13 +30,13 @@ checkRepo() {
     fi
 
     case $1 in
-    KMD | GIN)
+    KMD | GIN | AYA)
         printf "     "
         ;;
     CHIPS)
         printf "   "
         ;;
-    GAME | EMC2)
+    GAME | EMC2 | VRSC)
         printf "    "
         ;;
     esac
