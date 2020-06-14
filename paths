@@ -3,7 +3,7 @@
 #
 # @author webworker01
 #
-
+set -euxo
 komodolike=('VRSC' 'HUSH3' 'MCL')
 
 #declare non komodo clis - set the full path accessible as the second part of each string, the 3rd entry is the name of the data dir for the coin and assumes they are in $HOME
@@ -21,7 +21,7 @@ coinsfirst=(
 
 coinsthird=(
     'CHIPS chips-cli $HOME/chips3/src/chipsd .chips rescan chipsd.pid'
-    'GAME gamecredits-cli $HOME/GameCredits/src/gamecreditsd .gamecredits newaddress gamecredits.pid'
+    #'GAME gamecredits-cli $HOME/GameCredits/src/gamecreditsd .gamecredits newaddress gamecredits.pid'
     'EMC2 einsteinium-cli $HOME/einsteinium/src/einsteiniumd .einsteinium newaddress einsteinium.pid'
     #'HUSH3 $hushcli $hushd .komodo/HUSH3 kmd komodod.pid'
     'VRSC verus $HOME/VerusCoin/src/verusd .komodo/VRSC'
