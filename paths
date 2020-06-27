@@ -10,8 +10,8 @@ komodolike=('VRSC' 'HUSH3' 'MCL')
 hushcli="$HOME/hush3/src/komodo-cli -ac_name=HUSH3"
 hushd="$HOME/hush3/src/hushd"
 verusd="$HOME/VerusCoin/src/verusd -pid=${HOME}/.komodo/VRSC/komodod.pid"
-#marmaracli="$HOME/Marmara-v.1.0/src/komodo-cli -ac_name=MCL"
-#marmarad="$HOME/Marmara-v.1.0/src/komodod -ac_name=MCL -ac_supply=2000000 -ac_cc=2 -addnode=37.148.210.158 -addnode=37.148.212.36 -addressindex=1 -spentindex=1 -ac_marmara=1 -ac_staked=75 -ac_reward=3000000000 -pid=${HOME}/.komodo/HUSH3/komodod.pid"
+marmaracli="$HOME/Marmara-v.1.0/src/komodo-cli -ac_name=MCL"
+marmarad="$HOME/Marmara-v.1.0/src/komodod -ac_name=MCL -ac_supply=2000000 -ac_cc=2 -addnode=37.148.210.158 -addnode=37.148.212.36 -addressindex=1 -spentindex=1 -ac_marmara=1 -ac_staked=75 -ac_reward=3000000000 -pid=${HOME}/.komodo/HUSH3/komodod.pid"
 
 coinsfirst=(
     'BTC $HOME/bitcoin/src/bitcoin-cli $HOME/bitcoin/src/bitcoind .bitcoin rescan bitcoind.pid'
@@ -27,7 +27,7 @@ coinsthird=(
     'HUSH3 $hushcli $hushd .komodo/HUSH3 kmd komodod.pid'
     'VRSC $HOME/VerusCoin/src/verus $verusd .komodo/VRSC zimport komodod.pid'
     'AYA $HOME/AYAv2/src/aryacoin-cli $HOME/AYAv2/src/aryacoind .aryacoin newaddress aryacoin.pid'
-    #'MCL $marmaracli $marmarad .komodo/MCL kmd komodod.pid'
+    'MCL $marmaracli $marmarad .komodo/MCL kmd komodod.pid'
 )
 
 #for git checking - path and remote branch
