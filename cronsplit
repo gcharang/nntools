@@ -17,7 +17,7 @@ utxoamt=0.00010000
 splitamount=10000
 
 skipshort=('DPOW')
-skiplong=('VRSC DPOW')
+skiplong=('DPOW')
 
 doSplit() {
     local coin=$1
@@ -32,7 +32,7 @@ doSplit() {
             echo "${coin} utxos sprout: $acutxo"
             splitter=$($scriptpath/splitfunds ${coin} $acutxoqty 0)
         fi
-        log "cronsplit" "${coin} - utxos: $acutxo - $splitter"
+        log "cronsplit" "${coin} - utxos: $acutxo - txid: $splitter"
     fi
 }
 
@@ -55,8 +55,13 @@ if [[ -z $1 ]]; then
                 doSplit ${coin[0]}
             fi
         done
-
-        # doSplit "VRSC"
+    else
+        for coins in "${coinsthird[@]}"; do
+            coin=($coins)
+            if [[ ${komodolike[*]} =~ ${coin[0]} ]]; then
+                doSplit ${coin[0]}
+            fi
+        done
     fi
 else
     declare -a othercoins=()
@@ -74,7 +79,7 @@ else
     for coins in "${othercoins[@]}"; do
         coin=($coins)
 
-        if [[ ${skiplong[*]} =~ ${coin[0]} ]]; then
+        if [[ ${skiplong[*]} =~ ${coin[0]} ]] || [[ ${komodolike[*]} =~ ${coin[0]} ]]; then
             continue
         fi
 
@@ -92,11 +97,30 @@ else
 
         eval $(echo coincli=${coin[1]})
 
-        otherutxo=$($coincli listunspent | jq --arg amt "$coinsutxoamount" '[.[] | select(.amount==($amt|tonumber))] | length')
+        otherutxo=$(${coincli} listunspent | jq --arg amt "$coinsutxoamount" '[.[] | select(.amount==($amt|tonumber))] | length')
         if (( otherutxo < otherutxoqty )); then
             echo "${coin[0]} utxos: $otherutxo"
-            splitter=$(curl --url "http://127.0.0.1:$iguanaport" --data "{\"coin\":\"${coin[0]}\",\"agent\":\"iguana\",\"method\":\"splitfunds\",\"satoshis\":\"$coinsplitamount\",\"sendflag\":1,\"duplicates\":$otherutxoqty}")
-            log "cronsplit" "${coin[0]} - utxos: $otherutxo - $splitter"
+            raw_tx=$(curl -s --url "http://127.0.0.1:$iguanaport" --data "{\"coin\":\"${coin[0]}\",\"agent\":\"iguana\",\"method\":\"splitfunds\",\"satoshis\":\"$coinsplitamount\",\"sendflag\":1,\"duplicates\":$otherutxoqty}")
+            raw_tx=$(jq -r .result <<< $raw_tx)
+
+            if [[ ! -z $raw_tx ]]; then
+                if [[ "GLEEC" == ${coin[0]} ]]; then
+                    signed_tx=$(${coincli} signrawtransactionwithwallet ${raw_tx})
+                else
+                    signed_tx=$(${coincli} signrawtransaction ${raw_tx})
+                fi
+                signed_tx=$(jq -r .hex <<< $signed_tx)
+
+                if [[ ! -z $signed_tx ]]; then
+
+                    txid=$(${coincli} sendrawtransaction ${signed_tx})
+
+                    if [[ ! -z $txid ]]; then
+                        log "cronsplit" "${coin[0]} - utxos: ${otherutxo} - ${txid}"
+                    fi
+                fi
+            fi
         fi
+
     done
 fi
