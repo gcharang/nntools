@@ -36,7 +36,7 @@ checkRepo() {
     CHIPS)
         printf "   "
         ;;
-    GAME | EMC2 | VRSC | HUSH3 | MCL)
+    GAME | EMC2 | VRSC | GLEEC | MCL)
         printf "    "
         ;;
     esac
@@ -116,9 +116,9 @@ outputstats() {
             coinsutxoamount=0.00100000
             coinsntraddr=Adpj7WENLyRkq9vVknHa82rf3cVHjYvzCG
             ;;
-        HUSH3)
+        GLEEC)
             coinsutxoamount=$utxoamt
-            coinsntraddr=$kmdntrzaddr
+            coinsntraddr=FTsxvoops8zGeMbY3pHPwY86bfacGvMdfU
             ;;
         VRSC)
             coinsutxoamount=$utxoamt
