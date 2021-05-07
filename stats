@@ -138,6 +138,13 @@ outputstats() {
                 coinwalletpath="${HOME}/${coin[3]}/wallets/wallet.dat"
             fi
             ;;
+        SFUSD)
+            coinsutxoamount=$utxoamt
+            coinsntraddr=SjLrVr9tkBxoYVVxjZcKX3k8Dno2A28YD7
+            if [[ -f "${HOME}/.smartusd/wallets/wallet.dat" ]]; then
+                coinwalletpath="${HOME}/.smartusd/wallets/wallet.dat"
+            fi
+            ;;
         *)
             coinsutxoamount=$utxoamt
             coinsntraddr=$kmdntrzaddr
