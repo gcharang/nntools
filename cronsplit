@@ -91,8 +91,12 @@ else
             coinsplitamount=$splitamount
         fi
 
-        if [[ ${coin[0]} == "BTC" ]]; then
-            otherutxoqty=$btcutxoqty
+        # if [[ ${coin[0]} == "BTC" ]]; then
+        #     otherutxoqty=$btcutxoqty
+        # fi
+
+        if [[ ${coin[0]} == "LTC" ]]; then
+            otherutxoqty=$ltcutxoqty
         fi
 
         eval $(echo coincli=${coin[1]})

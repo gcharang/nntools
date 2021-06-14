@@ -43,11 +43,11 @@ checkRepo() {
 }
 
 #Do not change below for any reason!
-#The BTC and KMD address here must remain the same. Do not need to enter yours!
+#The LTC and KMD address here must remain the same. Do not need to enter yours!
 
 utxoamt=0.00010000
 ntrzdamt=-0.00083600
-btcntrzaddr=1P3rU1Nk1pmc2BiWC8dEy9bZa1ZbMp5jfg
+# btcntrzaddr=1P3rU1Nk1pmc2BiWC8dEy9bZa1ZbMp5jfg
 ltcntrzaddr=LhGojDga6V1fGzQfNGcYFAfKnDvsWeuAsP
 kmdntrzaddr=RXL3YXG2ceaB6C5hfJcN4fvmLH2C34knhA
 #Only count KMD->BTC after this timestamp (block 814000)
@@ -105,50 +105,50 @@ outputstats() {
         coinwalletpath="${HOME}/${coin[3]}/wallet.dat"
 
         case ${coin[0]} in
-        BTC)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=$btcntrzaddr
-            seasonfilter=$timefilter
-            ;;
-        LTC)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=$ltcntrzaddr
-            seasonfilter=$timefilter
-            ;;
-        GAME)
-            coinsutxoamount=0.00100000
-            coinsntraddr=Gftmt8hgzgNu6f1o85HMPuwTVBMSV2TYSt
-            ;;
-        GIN)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=Gftmt8hgzgNu6f1o85HMPuwTVBMSV2TYSt
-            ;;
-        EMC2)
-            coinsutxoamount=0.00100000
-            coinsntraddr=EfCkxbDFSn4X1VKMzyckyHaXLf4ithTGoM
-            ;;
-        AYA)
-            coinsutxoamount=0.001000000
-            coinsntraddr=Adpj7WENLyRkq9vVknHa82rf3cVHjYvzCG
-            ;;
-        GLEEC)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=FTsxvoops8zGeMbY3pHPwY86bfacGvMdfU
-            if [[ -f "${HOME}/${coin[3]}/wallets/wallet.dat" ]]; then
-                coinwalletpath="${HOME}/${coin[3]}/wallets/wallet.dat"
-            fi
-            ;;
-        SFUSD)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=SjLrVr9tkBxoYVVxjZcKX3k8Dno2A28YD7
-            if [[ -f "${HOME}/.smartusd/wallets/wallet.dat" ]]; then
-                coinwalletpath="${HOME}/.smartusd/wallets/wallet.dat"
-            fi
-            ;;
-        *)
-            coinsutxoamount=$utxoamt
-            coinsntraddr=$kmdntrzaddr
-            ;;
+            BTC)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=$btcntrzaddr
+                seasonfilter=$timefilter
+                ;;
+            LTC)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=$ltcntrzaddr
+                seasonfilter=$timefilter
+                if [[ -f "${HOME}/${coin[3]}/wallets/wallet.dat" ]]; then
+                    coinwalletpath="${HOME}/${coin[3]}/wallets/wallet.dat"
+                fi
+                ;;
+            GAME)
+                coinsutxoamount=0.00100000
+                coinsntraddr=Gftmt8hgzgNu6f1o85HMPuwTVBMSV2TYSt
+                ;;
+            GIN)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=Gftmt8hgzgNu6f1o85HMPuwTVBMSV2TYSt
+                ;;
+            EMC2)
+                coinsutxoamount=0.00100000
+                coinsntraddr=EfCkxbDFSn4X1VKMzyckyHaXLf4ithTGoM
+                ;;
+            AYA)
+                coinsutxoamount=0.001000000
+                coinsntraddr=Adpj7WENLyRkq9vVknHa82rf3cVHjYvzCG
+                ;;
+            GLEEC)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=FTsxvoops8zGeMbY3pHPwY86bfacGvMdfU
+                if [[ -f "${HOME}/${coin[3]}/wallets/wallet.dat" ]]; then
+                    coinwalletpath="${HOME}/${coin[3]}/wallets/wallet.dat"
+                fi
+                ;;
+            SFUSD)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=SjLrVr9tkBxoYVVxjZcKX3k8Dno2A28YD7
+                ;;
+            *)
+                coinsutxoamount=$utxoamt
+                coinsntraddr=$kmdntrzaddr
+                ;;
         esac
 
         coinstxinfo=$($coinexec listtransactions "*" $txscanamount)
